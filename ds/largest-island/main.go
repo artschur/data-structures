@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"largest-island/stack"
 	"os"
+	"strings"
 )
 
 func visitedMatrix(rows int, cols int) [][]bool {
@@ -20,7 +21,7 @@ func parseInput() [][]byte {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for scanner.Scan() {
-		line := scanner.Text()
+		line := strings.TrimSpace(scanner.Text()) // 👈 Trim spaces!
 		row := []byte(line)
 		matrix = append(matrix, row)
 	}
