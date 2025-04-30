@@ -3,7 +3,8 @@ package ht
 import "errors"
 
 var (
-	errKeyNotFound = errors.New("key not found")
+	errKeyNotFound  = errors.New("key not found")
+	errDuplicateKey = errors.New("key is duplicate")
 )
 
 type node struct {
@@ -30,17 +31,48 @@ func (h *HashTable) hash(key int) int {
 
 func (h *HashTable) Get(key int) (returnVal string, err error) {
 	hashedKey := h.hash(key)
-	val := h.buckets[hashedKey]
+	current := h.buckets[hashedKey]
 
-	if val == nil {
+	if current == nil {
 		return "", errKeyNotFound
 	}
 
-	for val != nil {
-		if val.key == key {
-			return val.value, nil
+	for current != nil {
+		if current.key == key {
+			return current.value, nil
 		}
-		val = val.next
+		current = current.next
 	}
 	return "", errKeyNotFound
+}
+
+func (h *HashTable) Set(key int, value string) {
+	hashedKey := h.hash(key)
+	current := h.buckets[hashedKey]
+
+	newNode := &node{
+		key:   key,
+		value: value,
+		next:  nil,
+	}
+
+	if current == nil {
+		h.buckets[hashedKey] = newNode
+		return
+	}
+
+	for current.next != nil { //if there are other nodes
+		if current.key == key {
+			current.value = value
+			return
+		}
+		current = current.next
+	}
+
+	if current.key == key {
+		current.value = value
+		return
+	}
+
+	current.next = newNode
 }
