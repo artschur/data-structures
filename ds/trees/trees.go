@@ -1,6 +1,15 @@
 package trees
 
-import "fmt"
+import (
+	"fmt"
+)
+
+type BinaryTree interface {
+	Insert(val int)
+	Left(pos int) int
+	Right(pos int) int
+	Parent(pos int) int
+}
 
 type Node struct {
 	Value any
@@ -32,7 +41,7 @@ func Inorder(root *Node) { //visita raiz entre
 	}
 }
 
-func BreadthFirst(root *Node) { //visita raiz entre
+func BreadthFirst(root *Node) { // visita por alturas
 	if root == nil {
 		return
 	}
@@ -48,6 +57,54 @@ func BreadthFirst(root *Node) { //visita raiz entre
 			queue = append(queue, node.Right)
 		}
 	}
+}
+
+type ArrayTree struct {
+	tree []int
+}
+
+func NewArrayTree(val int) *ArrayTree {
+	var treeArr [100]int
+	return &ArrayTree{
+		tree: treeArr[:],
+	}
+}
+
+func (at *ArrayTree) Parent(pos int) *int {
+	return &at.tree[(pos-1)/2]
+}
+
+func (at *ArrayTree) changeWithParent(pos int) {
+	temp := at.Parent(pos)
+	*at.Parent(pos) = at.GetValue(pos)
+	at.tree[pos] = *temp
+}
+
+func (at *ArrayTree) HeapifyUp(pos int) {
+	if *at.Parent(pos) < at.GetValue(pos) {
+		at.changeWithParent(pos)
+		at.HeapifyUp(pos)
+	}
+}
+
+func (at *ArrayTree) AddLeft(pos, val int) {
+	*at.Left(pos) = val
+}
+
+func (at *ArrayTree) AddRight(pos, val int) {
+	*at.Right(pos) = val
+}
+
+func (at *ArrayTree) Left(pos int) *int {
+	return &at.tree[(pos*2)+1]
+}
+
+func (at *ArrayTree) Right(pos int) *int {
+	return &at.tree[(pos*2)+2]
+}
+
+func (at *ArrayTree) GetValue(pos int) int {
+	return at.tree[pos]
 }
 
 func NewTree(val any) *Node {
