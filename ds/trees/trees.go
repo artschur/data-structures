@@ -64,46 +64,83 @@ type ArrayTree struct {
 }
 
 func NewArrayTree(val int) *ArrayTree {
-	var treeArr [100]int
+	treeArr := make([]int, 100)
+	treeArr[0] = val
 	return &ArrayTree{
 		tree: treeArr[:],
 	}
 }
 
-func (at *ArrayTree) Parent(pos int) *int {
+func (at *ArrayTree) parent(pos int) *int {
 	return &at.tree[(pos-1)/2]
 }
 
 func (at *ArrayTree) changeWithParent(pos int) {
-	temp := at.Parent(pos)
-	*at.Parent(pos) = at.GetValue(pos)
-	at.tree[pos] = *temp
+	at.tree[pos], *at.parent(pos) = *at.parent(pos), at.tree[pos]
+
 }
 
-func (at *ArrayTree) HeapifyUp(pos int) {
-	if *at.Parent(pos) < at.GetValue(pos) {
+func (at *ArrayTree) Insert(val int) {
+	at.tree = append(at.tree, val)
+	at.heapifyUp(len(at.tree) - 1)
+}
+
+func (at *ArrayTree) ExtractRoot() {
+	lastIndex := len(at.tree) - 1
+	at.tree[0] = at.tree[lastIndex]
+	at.tree = at.tree[:lastIndex]
+	at.heapifyDown(0)
+}
+
+func (at *ArrayTree) heapifyUp(pos int) {
+	if pos == 0 {
+		return
+	}
+	if *at.parent(pos) < at.getValue(pos) {
 		at.changeWithParent(pos)
-		at.HeapifyUp(pos)
+		at.heapifyUp((pos - 1) / 2)
 	}
 }
 
-func (at *ArrayTree) AddLeft(pos, val int) {
-	*at.Left(pos) = val
+func (at *ArrayTree) heapifyDown(pos int) {
+	leftPos := (pos * 2) + 1
+	rightPos := (pos * 2) + 2
+	if leftPos < len(at.tree) || rightPos < len(at.tree) {
+		return
+	}
+
+	largest := pos
+	if leftPos < len(at.tree) && *at.left(pos) > at.getValue(pos) {
+		largest = leftPos
+	}
+
+	if rightPos < len(at.tree) && *at.right(pos) > at.getValue(pos) {
+		largest = rightPos
+	}
+
+	if largest != pos {
+		at.changeWithParent(largest)
+		at.heapifyDown(largest)
+	}
 }
 
-func (at *ArrayTree) AddRight(pos, val int) {
-	*at.Right(pos) = val
+func (at *ArrayTree) addLeft(pos, val int) {
+	*at.left(pos) = val
 }
 
-func (at *ArrayTree) Left(pos int) *int {
+func (at *ArrayTree) addRight(pos, val int) {
+	*at.right(pos) = val
+}
+
+func (at *ArrayTree) left(pos int) *int {
 	return &at.tree[(pos*2)+1]
 }
 
-func (at *ArrayTree) Right(pos int) *int {
+func (at *ArrayTree) right(pos int) *int {
 	return &at.tree[(pos*2)+2]
 }
 
-func (at *ArrayTree) GetValue(pos int) int {
+func (at *ArrayTree) getValue(pos int) int {
 	return at.tree[pos]
 }
 
