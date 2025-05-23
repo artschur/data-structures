@@ -71,6 +71,24 @@ func NewArrayTree(val int) *ArrayTree {
 	}
 }
 
+func TransformToHeap(arr *[]int) *ArrayTree {
+	at := NewArrayTree(0)
+	at.tree = *arr
+	for start := len(at.tree) / 2; start >= 0; start-- {
+		at.heapifyDown(start)
+	}
+
+	return at
+}
+
+func HeapSort(arr []int) *ArrayTree {
+	newHeap := TransformToHeap(&arr)
+	for i := range len(newHeap.tree) {
+		newHeap.heapifyDown(i)
+	}
+	return newHeap
+}
+
 func (at *ArrayTree) parent(pos int) *int {
 	return &at.tree[(pos-1)/2]
 }
@@ -105,7 +123,7 @@ func (at *ArrayTree) heapifyUp(pos int) {
 func (at *ArrayTree) heapifyDown(pos int) {
 	leftPos := (pos * 2) + 1
 	rightPos := (pos * 2) + 2
-	if leftPos < len(at.tree) || rightPos < len(at.tree) {
+	if leftPos > len(at.tree) || rightPos > len(at.tree) {
 		return
 	}
 
