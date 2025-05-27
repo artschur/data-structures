@@ -1,30 +1,30 @@
 package stack
 
-type Coord struct {
+type coord struct {
 	X int
 	Y int
 }
 
-type Stack struct {
-	items []Coord
+type stack struct {
+	items []coord
 	Len   int
 }
 
-func NewStack() *Stack {
-	return &Stack{
-		items: make([]Coord, 0),
+func NewStack() *stack {
+	return &stack{
+		items: make([]coord, 0),
 		Len:   0,
 	}
 }
 
-func (s *Stack) Push(coord Coord) {
+func (s *stack) Push(coord coord) {
 	s.items = append(s.items, coord)
 	s.Len++
 }
 
-func (s *Stack) Pop() Coord {
+func (s *stack) Pop() coord {
 	if s.Len == 0 {
-		return Coord{}
+		return coord{}
 	}
 	last := s.items[s.Len-1]
 	s.items = s.items[:s.Len-1]
@@ -32,13 +32,13 @@ func (s *Stack) Pop() Coord {
 	return last
 }
 
-func (s *Stack) Peek() Coord {
+func (s *stack) Peek() coord {
 	if s.Len == 0 {
-		return Coord{}
+		return coord{}
 	}
 	return s.items[s.Len-1]
 }
 
-func (s *Stack) IsEmpty() bool {
+func (s *stack) IsEmpty() bool {
 	return s.Len == 0
 }

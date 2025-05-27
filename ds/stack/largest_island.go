@@ -1,9 +1,8 @@
-package main
+package stack
 
 import (
 	"bufio"
 	"fmt"
-	"largest-island/stack"
 	"os"
 	"strings"
 )
@@ -41,8 +40,8 @@ func searchIsland(matrix [][]byte, visited [][]bool, startRow int, startCol int)
 	rows := len(matrix)
 	cols := len(matrix[0])
 
-	s := stack.NewStack()
-	s.Push(stack.Coord{X: startRow, Y: startCol})
+	s := NewStack()
+	s.Push(coord{X: startRow, Y: startCol})
 	visited[startRow][startCol] = true
 	var size int = 0
 
@@ -58,7 +57,7 @@ func searchIsland(matrix [][]byte, visited [][]bool, startRow int, startCol int)
 			nextCol := current.Y + dir[1]
 			//if has not been visited and is land
 			if nextRow >= 0 && nextRow < rows && nextCol >= 0 && nextCol < cols && !visited[nextRow][nextCol] && matrix[nextRow][nextCol] == '1' {
-				s.Push(stack.Coord{X: nextRow, Y: nextCol})
+				s.Push(coord{X: nextRow, Y: nextCol})
 				visited[nextRow][nextCol] = true
 			}
 		}
@@ -66,7 +65,7 @@ func searchIsland(matrix [][]byte, visited [][]bool, startRow int, startCol int)
 	return size
 }
 
-func main() {
+func Largest_Island() {
 
 	matrix := parseInput()
 

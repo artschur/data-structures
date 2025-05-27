@@ -1,4 +1,4 @@
-package main
+package queue
 
 import (
 	"bufio"
@@ -6,13 +6,11 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
-	"min-moves/queue"
 )
 
-func parseInput() ([8][8]int, queue.State) {
+func parseInput() ([8][8]int, state) {
 	var matrix [8][8]int
-	var startingPos queue.State
+	var startingPos state
 
 	scanner := bufio.NewScanner(os.Stdin)
 	letterMapping := map[string]int{
@@ -41,8 +39,8 @@ func parseInput() ([8][8]int, queue.State) {
 			matrix[row][col] = 2
 		} else {
 			matrix[row][col] = 1 //cavalo
-			startingPos = queue.State{
-				Coord: queue.Coord{Row: row, Col: col}, Distance: 0,
+			startingPos = state{
+				Coord: coord{Row: row, Col: col}, Distance: 0,
 			}
 		}
 		isFinal = !isFinal
@@ -54,8 +52,8 @@ func parseInput() ([8][8]int, queue.State) {
 	return matrix, startingPos
 }
 
-func findShortestPath(matrix [8][8]int, posInit queue.State) int {
-	q := queue.Queue{}
+func findShortestPath(matrix [8][8]int, posInit state) int {
+	q := Queue{}
 	q.Push(posInit)
 
 	visited := [8][8]bool{}
@@ -77,8 +75,8 @@ func findShortestPath(matrix [8][8]int, posInit queue.State) int {
 
 			if nextRow >= 0 && nextRow < 8 && nextCol >= 0 && nextCol < 8 && !visited[nextRow][nextCol] {
 				visited[nextRow][nextCol] = true
-				nextState := queue.State{
-					Coord:    queue.Coord{Row: nextRow, Col: nextCol},
+				nextState := state{
+					Coord:    coord{Row: nextRow, Col: nextCol},
 					Distance: current.Distance + 1,
 					// atual + 1
 				}
@@ -89,7 +87,7 @@ func findShortestPath(matrix [8][8]int, posInit queue.State) int {
 	return -1
 }
 
-func main() {
+func MinimumKnightMoves() {
 	matrix, startingPos := parseInput()
 
 	shortestPath := findShortestPath(matrix, startingPos)

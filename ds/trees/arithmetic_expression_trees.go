@@ -4,19 +4,13 @@ import (
 	"bufio"
 	"os"
 	"slices"
-	"strconv"
 )
 
-func ReadInput() string {
+func readInput() string {
 	reader := bufio.NewReader(os.Stdin)
 	text, _ := reader.ReadString('\n')
 
 	return text
-}
-
-func isNumber(s string) bool {
-	_, err := strconv.Atoi(s)
-	return err == nil
 }
 
 func find_operator(expression string) int {
@@ -40,7 +34,7 @@ func find_operator(expression string) int {
 	return -1
 }
 
-func Mount_tree(expression string) *Node {
+func mount_tree(expression string) *node {
 	if len(expression) <= 1 {
 		return NewTree(expression)
 	}
@@ -57,15 +51,15 @@ func Mount_tree(expression string) *Node {
 
 	root := NewTree(operator)
 
-	root.Left = Mount_tree(left_expression)
-	root.Right = Mount_tree(right_expression)
+	root.Left = mount_tree(left_expression)
+	root.Right = mount_tree(right_expression)
 
 	return root
 }
 
-func main() {
-	input := ReadInput()
-	root := Mount_tree(input)
+func ArithmeticExpressionTreeSolution() {
+	input := readInput()
+	root := mount_tree(input)
 	Preorder(root)
 	Postorder(root)
 }

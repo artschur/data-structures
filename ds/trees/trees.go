@@ -4,20 +4,13 @@ import (
 	"fmt"
 )
 
-type BinaryTree interface {
-	Insert(val int)
-	Left(pos int) int
-	Right(pos int) int
-	Parent(pos int) int
-}
-
-type Node struct {
+type node struct {
 	Value string
-	Left  *Node
-	Right *Node
+	Left  *node
+	Right *node
 }
 
-func Preorder(root *Node) { //visita raiz aintes
+func Preorder(root *node) { //visita raiz aintes
 	if root != nil {
 		fmt.Printf("%v", root.Value)
 		Preorder(root.Left)
@@ -25,7 +18,7 @@ func Preorder(root *Node) { //visita raiz aintes
 	}
 }
 
-func Postorder(root *Node) { //visita raiz depois
+func Postorder(root *node) { //visita raiz depois
 	if root != nil {
 		Postorder(root.Left)
 		Postorder(root.Right)
@@ -34,7 +27,7 @@ func Postorder(root *Node) { //visita raiz depois
 	}
 }
 
-func Inorder(root *Node) { //visita raiz entre
+func Inorder(root *node) { //visita raiz entre
 	if root != nil {
 		Inorder(root.Left)
 		fmt.Println(root)
@@ -42,11 +35,11 @@ func Inorder(root *Node) { //visita raiz entre
 	}
 }
 
-func BreadthFirst(root *Node) { // visita por alturas
+func BreadthFirst(root *node) { // visita por alturas
 	if root == nil {
 		return
 	}
-	queue := []*Node{root}
+	queue := []*node{root}
 	for len(queue) > 0 {
 		node := queue[0]
 		queue = queue[1:] // remove the first element
@@ -60,27 +53,27 @@ func BreadthFirst(root *Node) { // visita por alturas
 	}
 }
 
-type ArrayTree struct {
+type arrayTree struct {
 	tree []int
 }
 
-func NewArrayTree(val int) *ArrayTree {
+func NewArrayTree(val int) *arrayTree {
 	treeArr := make([]int, 100)
 	treeArr[0] = val
-	return &ArrayTree{
+	return &arrayTree{
 		tree: treeArr[:],
 	}
 }
 
-func NewTree(val string) *Node {
-	return &Node{
-		Value: val,
+func NewTree(value string) *node {
+	return &node{
+		Value: value,
 		Left:  nil,
 		Right: nil,
 	}
 }
 
-func TransformToHeap(arr *[]int) *ArrayTree {
+func TransformToHeap(arr *[]int) *arrayTree {
 	at := NewArrayTree(0)
 	at.tree = *arr
 	for start := len(at.tree) / 2; start >= 0; start-- {
@@ -90,7 +83,7 @@ func TransformToHeap(arr *[]int) *ArrayTree {
 	return at
 }
 
-func HeapSort(arr []int) *ArrayTree {
+func HeapSort(arr []int) *arrayTree {
 	newHeap := TransformToHeap(&arr)
 	for i := range len(newHeap.tree) {
 		newHeap.heapifyDown(i)
@@ -98,19 +91,19 @@ func HeapSort(arr []int) *ArrayTree {
 	return newHeap
 }
 
-func (at *ArrayTree) Insert(val int) {
+func (at *arrayTree) Insert(val int) {
 	at.tree = append(at.tree, val)
 	at.heapifyUp(len(at.tree) - 1)
 }
 
-func (at *ArrayTree) ExtractRoot() {
+func (at *arrayTree) ExtractRoot() {
 	lastIndex := len(at.tree) - 1
 	at.tree[0] = at.tree[lastIndex]
 	at.tree = at.tree[:lastIndex]
 	at.heapifyDown(0)
 }
 
-func (at *ArrayTree) heapifyUp(pos int) {
+func (at *arrayTree) heapifyUp(pos int) {
 	if pos == 0 {
 		return
 	}
@@ -120,16 +113,16 @@ func (at *ArrayTree) heapifyUp(pos int) {
 	}
 }
 
-func (at *ArrayTree) parent(pos int) *int {
+func (at *arrayTree) parent(pos int) *int {
 	return &at.tree[(pos-1)/2]
 }
 
-func (at *ArrayTree) changeWithParent(pos int) {
+func (at *arrayTree) changeWithParent(pos int) {
 	at.tree[pos], *at.parent(pos) = *at.parent(pos), at.tree[pos]
 
 }
 
-func (at *ArrayTree) heapifyDown(pos int) {
+func (at *arrayTree) heapifyDown(pos int) {
 	leftPos := (pos * 2) + 1
 	rightPos := (pos * 2) + 2
 	if leftPos > len(at.tree) || rightPos > len(at.tree) {
@@ -151,22 +144,22 @@ func (at *ArrayTree) heapifyDown(pos int) {
 	}
 }
 
-func (at *ArrayTree) addLeft(pos, val int) {
+func (at *arrayTree) addLeft(pos, val int) {
 	*at.left(pos) = val
 }
 
-func (at *ArrayTree) addRight(pos, val int) {
+func (at *arrayTree) addRight(pos, val int) {
 	*at.right(pos) = val
 }
 
-func (at *ArrayTree) left(pos int) *int {
+func (at *arrayTree) left(pos int) *int {
 	return &at.tree[(pos*2)+1]
 }
 
-func (at *ArrayTree) right(pos int) *int {
+func (at *arrayTree) right(pos int) *int {
 	return &at.tree[(pos*2)+2]
 }
 
-func (at *ArrayTree) getValue(pos int) int {
+func (at *arrayTree) getValue(pos int) int {
 	return at.tree[pos]
 }
