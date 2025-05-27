@@ -19,7 +19,7 @@ type Node struct {
 
 func Preorder(root *Node) { //visita raiz aintes
 	if root != nil {
-		fmt.Println(root.Value)
+		fmt.Printf("%v", root.Value)
 		Preorder(root.Left)
 		Preorder(root.Right)
 	}
@@ -29,7 +29,8 @@ func Postorder(root *Node) { //visita raiz depois
 	if root != nil {
 		Postorder(root.Left)
 		Postorder(root.Right)
-		fmt.Println(root.Value)
+		fmt.Printf("%v", root.Value)
+
 	}
 }
 

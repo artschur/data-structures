@@ -1,19 +1,17 @@
 package trees
 
 import (
-	"fmt"
+	"bufio"
+	"os"
 	"slices"
 	"strconv"
-	"strings"
 )
 
-func readInput() (string, error) {
-	var input string
-	_, err := fmt.Scanln(&input)
-	if err != nil {
-		return "", err
-	}
-	return input, nil
+func ReadInput() string {
+	reader := bufio.NewReader(os.Stdin)
+	text, _ := reader.ReadString('\n')
+
+	return text
 }
 
 func isNumber(s string) bool {
@@ -42,8 +40,8 @@ func find_operator(expression string) int {
 	return -1
 }
 
-func mount_tree(expression string) *Node {
-	if len(expression) <= 1 || isNumber(expression) {
+func Mount_tree(expression string) *Node {
+	if len(expression) <= 1 {
 		return NewTree(expression)
 	}
 
@@ -59,18 +57,15 @@ func mount_tree(expression string) *Node {
 
 	root := NewTree(operator)
 
-	root.Left = mount_tree(left_expression)
-	root.Right = mount_tree(right_expression)
+	root.Left = Mount_tree(left_expression)
+	root.Right = Mount_tree(right_expression)
 
 	return root
 }
 
 func main() {
-	input, err := readInput()
-	strings.ReplaceAll(input, " ", "")
-	if err != nil {
-		fmt.Println("Error reading input:", err)
-		return
-	}
-	mount_tree("")
+	input := ReadInput()
+	root := Mount_tree(input)
+	Preorder(root)
+	Postorder(root)
 }

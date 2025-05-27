@@ -2,11 +2,12 @@ package main
 
 import (
 	"ed/trees"
-	"fmt"
 )
 
 func main() {
-	nt := trees.NewArrayTree(10)
-	nt.ExtractRoot()
-	fmt.Println(nt)
+	input := trees.ReadInput()
+	root := trees.Mount_tree(input)
+	trees.Preorder(root)
+	trees.Postorder(root)
+
 }
