@@ -12,7 +12,7 @@ type BinaryTree interface {
 }
 
 type Node struct {
-	Value any
+	Value string
 	Left  *Node
 	Right *Node
 }
@@ -71,6 +71,14 @@ func NewArrayTree(val int) *ArrayTree {
 	}
 }
 
+func NewTree(val string) *Node {
+	return &Node{
+		Value: val,
+		Left:  nil,
+		Right: nil,
+	}
+}
+
 func TransformToHeap(arr *[]int) *ArrayTree {
 	at := NewArrayTree(0)
 	at.tree = *arr
@@ -87,15 +95,6 @@ func HeapSort(arr []int) *ArrayTree {
 		newHeap.heapifyDown(i)
 	}
 	return newHeap
-}
-
-func (at *ArrayTree) parent(pos int) *int {
-	return &at.tree[(pos-1)/2]
-}
-
-func (at *ArrayTree) changeWithParent(pos int) {
-	at.tree[pos], *at.parent(pos) = *at.parent(pos), at.tree[pos]
-
 }
 
 func (at *ArrayTree) Insert(val int) {
@@ -118,6 +117,15 @@ func (at *ArrayTree) heapifyUp(pos int) {
 		at.changeWithParent(pos)
 		at.heapifyUp((pos - 1) / 2)
 	}
+}
+
+func (at *ArrayTree) parent(pos int) *int {
+	return &at.tree[(pos-1)/2]
+}
+
+func (at *ArrayTree) changeWithParent(pos int) {
+	at.tree[pos], *at.parent(pos) = *at.parent(pos), at.tree[pos]
+
 }
 
 func (at *ArrayTree) heapifyDown(pos int) {
@@ -160,12 +168,4 @@ func (at *ArrayTree) right(pos int) *int {
 
 func (at *ArrayTree) getValue(pos int) int {
 	return at.tree[pos]
-}
-
-func NewTree(val any) *Node {
-	return &Node{
-		Value: val,
-		Left:  nil,
-		Right: nil,
-	}
 }

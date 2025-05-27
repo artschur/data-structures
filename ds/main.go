@@ -7,6 +7,6 @@ import (
 
 func main() {
 	nt := trees.NewArrayTree(10)
-	nt.AddLeft(1, 20)
+	nt.ExtractRoot()
 	fmt.Println(nt)
 }
