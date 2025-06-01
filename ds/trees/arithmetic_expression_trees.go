@@ -51,8 +51,8 @@ func mount_tree(expression string) *node {
 
 	root := NewTree(operator)
 
-	root.Left = mount_tree(left_expression)
-	root.Right = mount_tree(right_expression)
+	root.left = mount_tree(left_expression)
+	root.right = mount_tree(right_expression)
 
 	return root
 }
