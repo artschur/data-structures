@@ -8,17 +8,17 @@ import (
 )
 
 type bnode struct {
-	value int8
+	value int
 	left  *bnode
 	right *bnode
 }
 
-func read_input_Btree() []int8 {
+func read_input_Btree() []int {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	scanner.Scan()
 
-	Nodes_arr := []int8{}
+	Nodes_arr := []int{}
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -26,7 +26,7 @@ func read_input_Btree() []int8 {
 		if err != nil {
 			panic("nonumber")
 		}
-		Nodes_arr = append(Nodes_arr, int8(new_number))
+		Nodes_arr = append(Nodes_arr, new_number)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -36,7 +36,7 @@ func read_input_Btree() []int8 {
 	return Nodes_arr
 }
 
-func insert_element(root *bnode, element int8) *bnode {
+func insert_element(root *bnode, element int) *bnode {
 	if root == nil {
 		return &bnode{
 			value: element,
