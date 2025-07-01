@@ -94,7 +94,7 @@ func (n *balanced_node) Insert(val int) *balanced_node {
 		n.left = n.left.Insert(val)
 	}
 	n.updateHeight()
-
+	return nil
 }
 
 func main() {
